@@ -51,7 +51,10 @@ function addDepartments() {
       }
     ])
     .then((answer => {
-        
+      db.query (
+        `INSERT INTO department (department_name) 
+        VALUES (${answer.newDepartment});`
+      );
     }));
 }
 
@@ -78,7 +81,10 @@ function addRole() {
       }
     ])
     .then((answer => {
-        
+      db.query (
+        `INSERT INTO roles (role_title, salary, department_id)
+        VALUES (${answer.roleTitle}, ${answer.roleSalary}, ${answer.roleDepartment});`
+      );
     }));
 }
 
@@ -98,14 +104,17 @@ function addEmployee() {
       },
 
       {
-        name: "employeeRole",
+        name: "role",
         type: "choice",
-        message: "What is the employee's department?",
+        message: "What is the employee's role?",
         choice: [""]
-      }
+      },
     ])
     .then((answer => {
-
+      db.query (
+        `INSERT INTO employee (first_name, last_name, position_id, manager_id)
+        VALUES (${answer.firstName}, ${answer.lastName}, ${answer.role}, ${answer.manager});`
+      );
     }));
 }
 
@@ -123,6 +132,7 @@ function updateEmployeeRole() {
     }));
 }
 
+// Main Menu for the user
 function userMenu() {
   inquirer
     .prompt([
@@ -163,16 +173,13 @@ function userMenu() {
         addDepartments();
         break;
 
-      case "Quit":
-        //something to exit loop
-        break;
-
       default:
         //do nothing
       }
     }));
 }
 
+// Initialize the script
 function init() {
   userMenu();
 }
